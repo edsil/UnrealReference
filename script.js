@@ -10,12 +10,18 @@ let keyWord1Element, keyWord2Element, keyWord3Element;
 let negKeyWord1Element, negKeyWord2Element, negKeyWord3Element;
 let indexPosition = 0;
 let stepSize = 50;
-let table, tableBody;
+let table, tableHeader, tableBody;
 let info1, info2;
 let keyword1, keyword2, keyword3;
 let negkeyword1, negkeyword2, negkeyword3;
 let lastTs = 0;
 let itemsDisplayed = 0;
+let loadLimit = 200;
+let sortOrder = { 1: "type", 2: "category", 3: "subcategory", 4: "name" };
+const typesSet = new Set();
+let typesArray, categoriesArray, subcategoriesArray;
+const categoriesSet = new Set();
+const subcategoriesSet = new Set();
 
 const allItems = [];
 
@@ -31,26 +37,13 @@ window.onload = function () {
   info2 = document.getElementById("info2");
   document.getElementById("filter").addEventListener("click", applyFilter);
   table = document.createElement("table");
+  tableHeader = document.createElement("thead");
   tableBody = document.createElement("tbody");
+  table.appendChild(tableHeader);
   table.appendChild(tableBody);
   outputElement.appendChild(table);
 }
 
-async function loadAllFiles() {
-  if (allItems.length == 0) {
-    await loadAndAppend("classes.csv", "Class");
-    await loadAndAppend("constants.csv", "Constant");
-    await loadAndAppend("enums.csv", "Enum");
-    await loadAndAppend("functions.csv", "Function");
-    info1.innerHTML = `Total items: ${allItems.length}`;
-  }
-  lastTs = 0;
-  tableBody.innerHTML = "";
-  itemsDisplayed = 0;
-  indexPosition = 0;
-  loadInPage();
-
-}
 
 function applyFilter() {
   filterKeys = [];
@@ -66,7 +59,31 @@ function applyFilter() {
   loadAllFiles();
 }
 
-async function loadAndAppend(fileInput, category) {
+async function loadAllFiles() {
+  if (allItems.length == 0) {
+    await loadAndAppend("classes.csv", "Class");
+    await loadAndAppend("constants.csv", "Constant");
+    await loadAndAppend("enums.csv", "Enum");
+    await loadAndAppend("functions.csv", "Function");
+    info1.innerHTML = `Total items: ${allItems.length}`;
+    typesArray = [...typesSet].sort();
+    categoriesArray = [...categoriesSet].sort();
+    subcategoriesArray = [...subcategoriesSet].sort();
+  }
+  lastTs = 0;
+  tableBody.innerHTML = "";
+  tableHeader.innerHTML = "";
+  itemsDisplayed = 0;
+  indexPosition = 0;
+  addHeader();
+  sortAllItems();
+  loadInPage();
+
+}
+
+
+
+async function loadAndAppend(fileInput, type) {
   const request = new Request(fileInput);
   const response = await fetch(request);
   const inputCsv = await response.text();
@@ -74,10 +91,85 @@ async function loadAndAppend(fileInput, category) {
   for (var line = 1; line < allLines.length; line++) {
     const items = allLines[line].split(",");
     if (items.length > 1) {
-      if (items[1].length > 1) allItems.push({ name: items[1], path: items[0], category });
+      if (items[1].length > 1) {
+        allItems.push({ name: items[1], path: items[0], type: type, category: items[2], subcategory: items[3] });
+        typesSet.add(type);
+        categoriesSet.add(items[2]);
+        subcategoriesSet.add(items[3]);
+      }
     }
   }
-  console.log(allLines.length);
+}
+
+function addHeader() {
+  const tr = document.createElement("tr");
+  tr.appendChild(genHeadElement("th", "Type", sortH1));
+  tr.appendChild(genHeadElement("th", "Category", sortH2));
+  tr.appendChild(genHeadElement("th", "SubCategory", sortH3));
+  tr.appendChild(genHeadElement("th", "Item(Link)", sortH4));
+  tr.appendChild(genHeadElement("th", "Word List"));
+  tableHeader.appendChild(tr);
+}
+
+function sortH1() {
+  adjustSort("type");
+}
+
+function sortH2() {
+  adjustSort("category");
+}
+
+function sortH3() {
+  adjustSort("subcategory");
+}
+
+function sortH4() {
+  adjustSort("name");
+}
+
+function adjustSort(name) {
+  let newSort = { 1: name };
+  let ctOrder = 2;
+  const sortKeys = Object.keys(sortOrder).sort();
+  for (var i = 0; i < sortKeys.length; i++) {
+    const h = sortOrder[sortKeys[i]];
+    if (h != name) {
+      newSort[ctOrder] = h;
+      ctOrder++;
+    }
+  }
+  sortOrder = newSort;
+  console.log(name);
+  for (const p in sortOrder) console.log(p, sortOrder[p]);
+  console.log("-");
+}
+
+
+function sortAllItems() {
+  allItems.sort((a, b) => {
+    let result = 0;
+    const sortKeys = Object.keys(sortOrder).sort();
+    for (var i = 0; i <= sortKeys.length; i++) {
+      const h = sortOrder[sortKeys[i]];
+      if (a[h] > b[h]) {
+        result = 1;
+        break;
+      }
+      if (a[h] < b[h]) {
+        result = -1;
+        break;
+      }
+    }
+    return result;
+  }
+  )
+}
+
+function genHeadElement(elementType, textnode, fcn = false) {
+  const element = document.createElement(elementType);
+  element.appendChild(document.createTextNode(textnode));
+  if (fcn) element.addEventListener("click", fcn);
+  return element;
 }
 
 
@@ -90,7 +182,7 @@ function loadInPage(ts) {
     lastTs = ts;
     if (Math.random() < 0.15) console.log(stepSize, timeTaken);
   }
-  for (var i = 0; i < stepSize && indexPosition < allItems.length; i++) {
+  for (var i = 0; i < stepSize && indexPosition < allItems.length && itemsDisplayed <= loadLimit; i++) {
     const item = allItems[indexPosition];
     let passFilter = true;
     for (var j = 0; j < filterKeys.length; j++) {
@@ -106,12 +198,20 @@ function loadInPage(ts) {
 
     if (passFilter) {
       const row = document.createElement("tr");
+      const cellType = document.createElement("td");
       const cellCategory = document.createElement("td");
+      const cellSubCategory = document.createElement("td");
       const cellItem = document.createElement("td");
       const cellwordlist = document.createElement("td");
 
+      cellType.appendChild(document.createTextNode(item.type));
+      row.appendChild(cellType);
+
       cellCategory.appendChild(document.createTextNode(item.category));
       row.appendChild(cellCategory);
+
+      cellSubCategory.appendChild(document.createTextNode(item.subcategory));
+      row.appendChild(cellSubCategory);
 
       const itemLink = document.createElement('a');
       itemLink.appendChild(document.createTextNode(item.name));
@@ -130,7 +230,7 @@ function loadInPage(ts) {
     indexPosition++;
   };
   info2.innerHTML = `Now displaying: ${itemsDisplayed} items`;
-  if (indexPosition < allItems.length) {
+  if (indexPosition < allItems.length && itemsDisplayed <= loadLimit) {
     window.requestAnimationFrame(loadInPage);
   }
 }

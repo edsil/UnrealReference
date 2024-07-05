@@ -1,0 +1,39 @@
+table {
+  border-collapse: collapse;
+  border: 2px solid rgb(140 140 140);
+  font-family: sans-serif;
+  font-size: 0.7rem;
+  letter-spacing: 1px;
+}
+
+caption {
+  caption-side: top;
+  border: 2px solid rgb(140 140 140);
+  padding: 10px;
+  font-size: 1.7rem;
+  font-weight: bold;
+}
+
+thead {
+  background-color: rgb(228 240 245);
+  font-size: 1rem;
+}
+
+td,
+thead {
+  text-align: center;
+}
+
+th,
+td {
+  border: 1px solid rgb(160 160 160);
+  padding: 2px 7px;
+}
+
+tfoot th {
+  text-align: justify;
+}
+
+tfoot td {
+  font-weight: bold;
+}

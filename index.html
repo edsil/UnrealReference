@@ -6,69 +6,100 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Unreal Engine Reference</title>
+  <link rel="stylesheet" href="style.css">
+
 </head>
 
 <body>
   <table>
-    <caption>Filters</caption>
-    <thead>
-      <tr>
-        <th>
-          <p style="margin-right:50px"> To exclude </p>
-        </th>
-        <th>
-          <p style="margin-right:50px"> Case Sensitive </p>
-        </th>
-        <th> Keyword </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><input type="checkbox" id="keyexclude1" /></td>
-        <td><input type="checkbox" id="keycase1" /></td>
-        <td><input type="text" id="keyword1" /></td>
-      </tr>
-      <tr>
-        <td><input type="checkbox" id="keyexclude2" /></td>
-        <td><input type="checkbox" id="keycase2" /></td>
-        <td><input type="text" id="keyword2" /></td>
-      </tr>
-      <tr>
-        <td><input type="checkbox" id="keyexclude3" /></td>
-        <td><input type="checkbox" id="keycase3" /></td>
-        <td><input type="text" id="keyword3" /></td>
-      </tr>
-      <tr>
-        <td><input type="checkbox" id="keyexclude4" /></td>
-        <td><input type="checkbox" id="keycase4" /></td>
-        <td><input type="text" id="keyword4" /></td>
-      </tr>
-      <tr>
-        <td><input type="checkbox" id="keyexclude5" /></td>
-        <td><input type="checkbox" id="keycase5" /></td>
-        <td><input type="text" id="keyword5" /></td>
-      </tr>
-      <tr>
-        <td><input type="checkbox" id="keyexclude6" /></td>
-        <td><input type="checkbox" id="keycase6" /></td>
-        <td><input type="text" id="keyword6" /></td>
-      </tr>
-      <tr>
-        <td><input type="checkbox" id="keyexclude7" /></td>
-        <td><input type="checkbox" id="keycase7" /></td>
-        <td><input type="text" id="keyword7" /></td>
-      </tr>
-    </tbody>
+    <tr>
+      <td>
+        <table>
+          <caption>Filters</caption>
+          <thead>
+            <tr>
+              <th>To exclude</th>
+              <th>Case Sensitive</th>
+              <th>Keyword</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><input type="checkbox" id="keyexclude1" /></td>
+              <td><input type="checkbox" id="keycase1" /></td>
+              <td><input type="text" id="keyword1" /></td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" id="keyexclude2" /></td>
+              <td><input type="checkbox" id="keycase2" /></td>
+              <td><input type="text" id="keyword2" /></td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" id="keyexclude3" /></td>
+              <td><input type="checkbox" id="keycase3" /></td>
+              <td><input type="text" id="keyword3" /></td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" id="keyexclude4" /></td>
+              <td><input type="checkbox" id="keycase4" /></td>
+              <td><input type="text" id="keyword4" /></td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" id="keyexclude5" /></td>
+              <td><input type="checkbox" id="keycase5" /></td>
+              <td><input type="text" id="keyword5" /></td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" id="keyexclude6" /></td>
+              <td><input type="checkbox" id="keycase6" /></td>
+              <td><input type="text" id="keyword6" /></td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" id="keyexclude7" /></td>
+              <td><input type="checkbox" id="keycase7" /></td>
+              <td><input type="text" id="keyword7" /></td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
+      <td>
+        <table>
+          <caption>Groups</caption>
+          <thead>
+            <tr>
+              <th>Types</th>
+              <th>Categories</th>
+              <th>SubCategories</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th>
+                <div id="types-list"></div>
+              </th>
+              <th>
+                <div id="categories-list"></div>
+              </th>
+              <th>
+                <div id="subcategories-list"></div>
+              </th>
+            </tr>
+          </tbody>
+        </table>
+      </td>
   </table>
+  <button id="filter">Apply Filters</button>
+
 
 
   <br>
   <div id="info1"></div>
   <div id="info2"></div>
-  <button id="filter">Apply Filter</button>
+
 
   <div id="output"></div>
   <script src="script.js" type="module"></script>
+
 </body>
 
 </html>
