@@ -16,7 +16,7 @@ let keyword1, keyword2, keyword3;
 let negkeyword1, negkeyword2, negkeyword3;
 let lastTs = 0;
 let itemsDisplayed = 0;
-let loadLimit = 200;
+let loadLimit = 2000;
 let sortOrder = { 1: "type", 2: "category", 3: "subcategory", 4: "name" };
 const typesSet = new Set();
 let typesArray, categoriesArray, subcategoriesArray;
