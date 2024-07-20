@@ -42,6 +42,9 @@ window.onload = function () {
   table.appendChild(tableHeader);
   table.appendChild(tableBody);
   outputElement.appendChild(table);
+  document.addEventListener("keypress", function(e) {
+    if (e.key == "Enter") applyFilter()
+  };
 }
 
 
